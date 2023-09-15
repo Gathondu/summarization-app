@@ -1,1 +1,1 @@
-## Simple AI summarization tool to interact with wikipedia
+## Simple AI summarization tools
