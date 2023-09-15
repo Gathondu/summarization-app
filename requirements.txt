@@ -1,0 +1,4 @@
+openai
+langchain
+python_dotenv
+wikipedia
