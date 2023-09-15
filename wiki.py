@@ -1,12 +1,12 @@
-import os
-from dotenv import load_dotenv, find_dotenv
 from langchain.chat_models import ChatOpenAI
 from langchain.agents import initialize_agent, Tool
 from langchain.utilities import WikipediaAPIWrapper
 
+from utils import load_env
+
 
 if __name__ == "__main__":
-    load_dotenv(find_dotenv(), override=True)
+    load_env()
 
     llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo")
     wikipedia = WikipediaAPIWrapper()
@@ -32,5 +32,11 @@ if __name__ == "__main__":
             print("You must provide a question!")
             continue
         i += 1
-        summary = agent_executor.run(query)
+        try:
+            summary = agent_executor.run(query)
+        except ValueError as e:
+            summary = str(e)
+            if not summary.startswith("Could not parse LLM output: `"):
+                raise e
+            summary = summary.removeprefix("Could not parse LLM output: `").removesuffix("`")
         print(f'SUMMARY \n {"-"*50} \n {summary} \n')
